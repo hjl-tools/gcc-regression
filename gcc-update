@@ -63,6 +63,7 @@ case "$status" in
     exit 1
   else
     echo $LAST_REVISION > $current_revision
+    ./contrib/gcc_update --touch >> $LOG
     exit 0
   fi
   ;;
@@ -82,7 +83,7 @@ case "$status" in
     fi
   done
   # Check if changes are relevant.
-  files=$(git diff --stat master origin/master |
+  files=$(git diff --stat $branch $origin |
 	  grep "|" |
 	  awk '{ print $1 }' |
 	  grep -v /ada/ |
@@ -132,8 +133,15 @@ case "$status" in
 esac
 
 if [ -z "$files" ]; then
-  echo No relevant changes on $branch since revision $LAST_REVISION!
-  exit 0
+  echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
+  if [ -f $current_revision ]; then
+    echo No relevant changes on $branch since revision $LAST_REVISION!
+    exit 1
+  else
+    echo $LAST_REVISION > $current_revision
+    ./contrib/gcc_update --touch >> $LOG
+    exit 0
+  fi
 fi
 
 # Fast-forward

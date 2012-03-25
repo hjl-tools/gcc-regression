@@ -1,1 +1,9 @@
+current_revision.*
+current_success.*
+bld
 gcc
+git.log
+lock
+nohup.*
+makelog.*
+mail.conf

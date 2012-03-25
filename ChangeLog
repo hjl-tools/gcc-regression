@@ -1,0 +1,6 @@
+2012-03-24  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile: New.
+	* gcc-build: Likewise.
+	* gcc-update: Likewise.
+	* mail.conf.in: Likewise.

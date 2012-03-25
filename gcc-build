@@ -1,0 +1,141 @@
+#!/bin/sh
+
+cd $(dirname $0)
+
+ARCH=$(arch)
+
+OPTION=
+while [ 1 = 1 ]; do
+  case x"${1}" in
+  x--with*)
+    CONFIG_FLAGS="$CONFIG_FLAGS ${1}"
+    case $CONFIG_FLAGS in
+    *atom*)
+      OPTION=.atom
+      ;;
+    *core2)
+      OPTION=.core2
+      ;;
+    *corei7)
+      OPTION=.corei7
+      ;;
+    *corei7-avx)
+      OPTION=.corei7-avx
+      ;;
+    *)
+      echo $0: Unknown option: $1
+      ;;
+    esac
+    shift
+    ;;
+  x-m32)
+    ARCH=i686
+    shift
+    ;;
+  x-mx32)
+    OPTION=${OPTION}.x32
+    ENABLE_X32=yes
+    shift
+    ;;
+  *)
+    break
+    ;;
+  esac
+done
+
+trap 'rm -f lock; exit 1' 1 2 12 15
+
+# Check if a build process is running.
+if [ -L lock ]; then
+  BUILD_PID=$(readlink lock)
+  if kill -0 $BUILD_PID > /dev/null 2>&1; then
+    echo Build process $BUILD_PID is running!
+    exit 1
+  fi
+fi
+
+rm -f lock
+
+ln -s "$$" lock
+
+if [ ! -d gcc/.git ]; then
+  echo "GCC git source tree doesn't exist!"
+  exit 1
+fi
+
+cd gcc
+case $(git status | grep "On branch" | sed -e "s/.*On branch //") in
+master)
+  GCC=trunk
+  ;;
+*)
+  GCC=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+  ;;
+esac
+cd ..
+
+current_revision=current_revision.$GCC.$ARCH$OPTION
+current_success=current_success.$GCC.$ARCH$OPTION
+
+if [ -f $current_revision ]; then
+  LAST_LOG=makelog.$LAST_SUCCESS.$GCC.$ARCH$OPTION
+  [ -f $LAST_LOG ] || LAST_LOG=
+fi
+
+# Update GCC source.  $current_revision will be updated by ./gcc-update.
+ARCH=$ARCH OPTION=$OPTION ./gcc-update
+STATUS=$?
+if [ $STATUS = 0 ]; then
+  CURRENT_LOG=makelog.$(cat $current_revision).$GCC.$ARCH$OPTION
+  make ARCH=$ARCH GCC=$GCC one CONFIG_FLAGS="$CONFIG_FLAGS" \
+       ENABLE_X32=$ENABLE_X32 \
+       CURRENT_LOG=$CURRENT_LOG > $CURRENT_LOG 2>&1
+  STATUS=$?
+  if [ $STATUS = 0 ]; then
+    cp $current_revision $current_success
+  fi
+fi
+
+if [ $STATUS = 0 -a -n "$LAST_LOG" ]; then
+  # Check regressions
+  grep FAIL $CURRENT_LOG | 
+    grep -v libmudflap |
+    grep -v gcc.c-torture/compile/limits-exprparen.c |
+    grep -v libgomp.graphite/force-parallel-6.c |
+    sort > $CURRENT_LOG.fail
+  grep "^ERROR" $CURRENT_LOG | sort >> $CURRENT_LOG.fail
+  grep "^UNRESOLVED" $CURRENT_LOG | sort >> $CURRENT_LOG.fail
+  grep FAIL $LAST_LOG |
+    grep -v libmudflap |
+    grep -v gcc.c-torture/compile/limits-exprparen.c |
+    grep -v libgomp.graphite/force-parallel-6.c |
+    sort > $LAST_LOG.fail
+  grep "^ERROR" $LAST_LOG | sort >> $LAST_LOG.fail
+  grep "^UNRESOLVED" $LAST_LOG | sort >> $LAST_LOG.fail
+  diff -up $LAST_LOG.fail $CURRENT_LOG.fail > $CURRENT_LOG.diff
+  grep -v $CURRENT_LOG.fail $CURRENT_LOG.diff | grep "^\+" |
+    sed -e "s/^\+//" > $CURRENT_LOG.newfail
+  grep -v $LAST_LOG.fail $CURRENT_LOG.diff | grep "^\-" |
+    sed -e "s/^-//" > $CURRENT_LOG.newpass
+
+  rm -f $LAST_LOG.fail $CURRENT_LOG.fail $CURRENT_LOG.diff
+
+  # Check if $CURRENT_LOG.newfail or $CURRENT_LOG.newpass isn't empty.
+  if [ -s $CURRENT_LOG.newfail -o -s $CURRENT_LOG.newpass ]; then
+    echo "New failures:" > $CURRENT_LOG.reg
+    cat $CURRENT_LOG.newfail >> $CURRENT_LOG.reg
+    echo >> $CURRENT_LOG.reg
+    echo "New passes:" >> $CURRENT_LOG.reg
+    cat $CURRENT_LOG.newpass >> $CURRENT_LOG.reg
+    Mail -s "Regressions on $GCC at revision $(cat $current_revision) vs revision $LAST_SUCCESS" \
+      $(grep REGRESSION-MAILTO ./mail.conf | sed -e "s/.*MAILTO=//") \
+      < $CURRENT_LOG.reg
+    STATUS=1
+  fi
+
+  rm -f $CURRENT_LOG.newfail $CURRENT_LOG.newpass
+fi
+
+rm -f lock
+
+exit $STATUS

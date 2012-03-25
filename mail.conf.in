@@ -1,0 +1,2 @@
+MAILTO=gcc-testresults@gcc.gnu.org
+REGRESSION-MAILTO=gcc-regression@gcc.gnu.org

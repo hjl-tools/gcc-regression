@@ -1,0 +1,156 @@
+#!/bin/sh
+
+if [ ! -f mail.conf ]; then
+  echo "mail.conf does not exist! See mail.conf.in for example."
+  exit 1
+fi
+
+[ -z "$ARCH" ] && ARCH=$(arch)
+
+GCC_DIR=gcc
+
+echo "Update $GCC_DIR"
+
+STATUS=0
+LOG=`pwd`/git.log
+
+cd $GCC_DIR
+
+rm -f gcc/REVISION
+
+LAST_REVISION=$(git log -1 |
+		grep git-svn-id |
+		awk '{ print $2 }' |
+		awk -F@ '{ print $2 }')
+
+# Check branch status
+branch=$(git status | grep "On branch" | sed -e "s/.*On branch //")
+
+case $branch in
+master)
+  svn_branch=trunk
+  GCC=trunk
+  ;;
+*)
+  svn_branch=$branch
+  GCC=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+  ;;
+esac
+
+current_revision=../current_revision.$GCC.$ARCH$OPTION
+
+# Check if GCC source is clean
+status=$(git status | tail -2 | grep -v "On branch")
+case "$status" in
+*clean*)
+  ;;
+*)
+  git status |
+  Mail -s "GCC $branch branch not clean" \
+      $(sed -e "s/^MAILTO=//" -e "s/.*=.*//" ../mail.conf)
+  exit 1
+  ;;
+esac
+
+# Check if we need to fast-forward
+git fetch > $LOG 2>&1
+status=$(git status | head -2 | grep -v "On branch")
+case "$status" in
+*clean*)
+  echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
+  if [ -f $current_revision ]; then
+    echo No changes on $branch since revision $LAST_REVISION!
+    exit 1
+  else
+    echo $LAST_REVISION > $current_revision
+    exit 0
+  fi
+  ;;
+*"can be fast-forwarded"*)
+  origin=origin/$branch
+  skip_cpus="alpha arm avr bfin c6x cr16 cris epiphany fr30 frv h8300
+	     ia64 iq2000 lm32 m32c m32r m68k mcore mep microblaze mips
+	     mmix mn10300 moxie pa pdp11 picochip rl78 rs6000 rx s390
+	     score sh sparc spu stormy16 tilegx tilepro v850 vax vms
+	     xtensa"
+  skip=
+  for c in $skip_cpus; do
+    if [ -z "$skip" ]; then 
+      skip="$c"
+    else
+      skip="$skip|/$c"
+    fi
+  done
+  # Check if changes are relevant.
+  files=$(git diff --stat master origin/master |
+	  grep "|" |
+	  awk '{ print $1 }' |
+	  grep -v /ada/ |
+	  grep -v /libada/ |
+	  grep -v /go/ |
+	  grep -v /libgo/ |
+	  grep -v BASE-VER |
+	  grep -v ChangeLog |
+	  grep -v contrib/ |
+	  grep -v COPYING |
+	  grep -v DATESTAMP |
+	  grep -v DEV-PHASE |
+	  grep -v cygming |
+	  grep -v cygwin |
+	  grep -v darwin |
+	  grep -v djgpp |
+	  grep -v freebsd |
+	  grep -v hpux |
+	  grep -v interix |
+	  grep -v lynx |
+	  grep -v mingw |
+	  grep -v netbsd |
+	  grep -v netware |
+	  grep -v nwld |
+	  grep -v openbsd |
+	  grep -v rtems |
+	  grep -v sol2 |
+	  grep -v solaris |
+	  grep -v vxworks |
+	  grep -v win32 |
+	  grep -v /doc/ |
+	  grep -v /po/ |
+	  grep -v maintainer-scripts |
+	  grep -v MAINTAINERS |
+	  grep -v README |
+	  grep -v testsuite/ |
+	  grep -v .gitignore |
+	  egrep -v "\.texi$" |
+	  egrep -v "($skip)")
+  ;;
+*)
+  git status |
+  Mail -s "GCC $branch branch cannot be fast-forwarded" \
+      $(sed -e "s/^MAILTO=//" -e "s/.*=.*//" ../mail.conf)
+  exit 1
+  ;;
+esac
+
+if [ -z "$files" ]; then
+  echo No relevant changes on $branch since revision $LAST_REVISION!
+  exit 0
+fi
+
+# Fast-forward
+echo Fast-forward GCC $branch branch
+git merge $origin >> $LOG
+if [ $? != 0 ]; then
+  Mail -s "GCC $branch branch failed to fast-forward" \
+      $(sed -e "s/^MAILTO=//" -e "s/.*=.*//" ../mail.conf) < $LOG
+  exit 1
+fi
+./contrib/gcc_update --touch >> $LOG
+
+CURRENT_REVISION=$(git log -1 |
+		  grep git-svn-id |
+		  awk '{ print $2 }' |
+		  awk -F@ '{ print $2 }')
+
+echo "[$svn_branch revision $CURRENT_REVISION]" > gcc/REVISION
+echo $CURRENT_REVISION > $current_revision
+exit 0

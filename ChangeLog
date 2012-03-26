@@ -1,5 +1,9 @@
 2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-update: Check $GCC_DIR is a GCC git source tree.
+
+2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* .gitignore: Add src-* and remove gcc.
 
 	* Makefile (SRC): New.

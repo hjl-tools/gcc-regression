@@ -75,9 +75,10 @@ if [ -f $current_revision ]; then
 fi
 
 # Update GCC source.  $current_revision will be updated by ./gcc-update.
-ARCH=$ARCH OPTION=$OPTION ./gcc-update
+ARCH=$ARCH OPTION=$OPTION ./gcc-update $GCC
 STATUS=$?
-if [ $STATUS = 0 ]; then
+case $STATUS in
+0)
   CURRENT_LOG=makelog.$(cat $current_revision).$GCC.$ARCH$OPTION
   make ARCH=$ARCH GCC=$GCC one CONFIG_FLAGS="$CONFIG_FLAGS" \
        ENABLE_X32=$ENABLE_X32 \
@@ -86,7 +87,12 @@ if [ $STATUS = 0 ]; then
   if [ $STATUS = 0 ]; then
     cp $current_revision $current_success
   fi
-fi
+  ;;
+2)
+  # 2 means no relevant changes.
+  rm -f lock
+  exit 0
+esac
 
 if [ $STATUS = 0 -a -n "$LAST_LOG" ]; then
   # Check regressions

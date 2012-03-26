@@ -1,5 +1,12 @@
 2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build: Pass $GCC to ./gcc-update.  Quit if there are no
+	no relevant changes.
+
+	* gcc-update: Return 2 if there are no relevant changes.
+
+2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* gcc-update: Check $GCC_DIR is a GCC git source tree.
 
 2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>

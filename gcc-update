@@ -1,27 +1,16 @@
 #!/bin/sh
 
-if [ ! -f mail.conf ]; then
-  echo "mail.conf does not exist! See mail.conf.in for example."
-  exit 1
-fi
+. ./gcc.options
 
 [ -z "$ARCH" ] && ARCH=$(arch)
 
-GCC_DIR=gcc
+echo "Update $GCC_DIR GCC git source tree"
 
-echo "Update $GCC_DIR"
-
-STATUS=0
 LOG=`pwd`/git.log
 
 cd $GCC_DIR
 
 rm -f gcc/REVISION
-
-LAST_REVISION=$(git log -1 |
-		grep git-svn-id |
-		awk '{ print $2 }' |
-		awk -F@ '{ print $2 }')
 
 # Check branch status
 branch=$(git status | grep "On branch" | sed -e "s/.*On branch //")
@@ -29,15 +18,29 @@ branch=$(git status | grep "On branch" | sed -e "s/.*On branch //")
 case $branch in
 master)
   svn_branch=trunk
-  GCC=trunk
+  GCC_VERSION=trunk
   ;;
 *)
   svn_branch=$branch
-  GCC=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+  GCC_VERSION=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
   ;;
 esac
 
+if [ "$GCC" != "$GCC_VERSION" ]; then
+  echo "$GCC_DIR is GCC $GCC_VERSION source tree, expecting GCC $GCC source tree"
+  exit 1
+fi
+
 current_revision=../current_revision.$GCC.$ARCH$OPTION
+
+if [ -f $current_revision ]; then
+  last_commit=$(cat $current_revision)
+  last_commit=$(git log --grep "git-svn-id.*@$last_commit" |
+		head -1 |
+		awk '{ print $2 }')
+else
+  last_commit=$branch
+fi
 
 # Check if GCC source is clean
 status=$(git status | tail -2 | grep -v "On branch")
@@ -56,18 +59,7 @@ esac
 git fetch > $LOG 2>&1
 status=$(git status | head -2 | grep -v "On branch")
 case "$status" in
-*clean*)
-  echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
-  if [ -f $current_revision ]; then
-    echo No changes on $branch since revision $LAST_REVISION!
-    exit 1
-  else
-    echo $LAST_REVISION > $current_revision
-    ./contrib/gcc_update --touch >> $LOG
-    exit 0
-  fi
-  ;;
-*"can be fast-forwarded"*)
+*clean*|*"can be fast-forwarded"*)
   origin=origin/$branch
   skip_cpus="alpha arm avr bfin c6x cr16 cris epiphany fr30 frv h8300
 	     ia64 iq2000 lm32 m32c m32r m68k mcore mep microblaze mips
@@ -83,7 +75,7 @@ case "$status" in
     fi
   done
   # Check if changes are relevant.
-  files=$(git diff --stat $branch $origin |
+  files=$(git diff --stat $last_commit $origin |
 	  grep "|" |
 	  awk '{ print $1 }' |
 	  grep -v /ada/ |
@@ -133,6 +125,10 @@ case "$status" in
 esac
 
 if [ -z "$files" ]; then
+  LAST_REVISION=$(git log -1 |
+		  grep git-svn-id |
+		  awk '{ print $2 }' |
+		  awk -F@ '{ print $2 }')
   echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
   if [ -f $current_revision ]; then
     echo No relevant changes on $branch since revision $LAST_REVISION!
@@ -145,7 +141,7 @@ if [ -z "$files" ]; then
 fi
 
 # Fast-forward
-echo Fast-forward GCC $branch branch
+echo Fast-forward GCC $branch source tree
 git merge $origin >> $LOG
 if [ $? != 0 ]; then
   Mail -s "GCC $branch branch failed to fast-forward" \
@@ -155,9 +151,9 @@ fi
 ./contrib/gcc_update --touch >> $LOG
 
 CURRENT_REVISION=$(git log -1 |
-		  grep git-svn-id |
-		  awk '{ print $2 }' |
-		  awk -F@ '{ print $2 }')
+		   grep git-svn-id |
+		   awk '{ print $2 }' |
+		   awk -F@ '{ print $2 }')
 
 echo "[$svn_branch revision $CURRENT_REVISION]" > gcc/REVISION
 echo $CURRENT_REVISION > $current_revision

@@ -43,6 +43,8 @@ while [ 1 = 1 ]; do
   esac
 done
 
+. ./gcc.options
+
 trap 'rm -f lock; exit 1' 1 2 12 15
 
 # Check if a build process is running.
@@ -58,21 +60,11 @@ rm -f lock
 
 ln -s "$$" lock
 
-if [ ! -d gcc/.git ]; then
-  echo "GCC git source tree doesn't exist!"
+if [ ! -d $GCC_DIR/.git ]; then
+  echo "$GCC_DIR isn't a GCC git source tree!"
+  rm -f lock
   exit 1
 fi
-
-cd gcc
-case $(git status | grep "On branch" | sed -e "s/.*On branch //") in
-master)
-  GCC=trunk
-  ;;
-*)
-  GCC=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
-  ;;
-esac
-cd ..
 
 current_revision=current_revision.$GCC.$ARCH$OPTION
 current_success=current_success.$GCC.$ARCH$OPTION

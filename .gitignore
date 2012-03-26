@@ -1,7 +1,7 @@
 current_revision.*
 current_success.*
 bld
-gcc
+src-*
 git.log
 lock
 nohup.*

@@ -1,0 +1,21 @@
+if [ ! -f mail.conf ]; then
+  echo "mail.conf does not exist! See mail.conf.in for example."
+  exit 1
+fi
+
+[ -n "$ARCH" ] || ARCH=$(arch)
+
+GCC="${1-trunk}"
+
+case "$GCC" in
+trunk|[0-9.]*)
+  ;;
+gcc-[0-9.]*)
+  GCC=$(echo $GCC | sed -e "s/gcc-//")
+  ;;
+*)
+  echo Unknown branch: $GCC
+  exit 1
+esac
+
+GCC_DIR=src-$GCC

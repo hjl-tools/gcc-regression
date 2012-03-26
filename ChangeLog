@@ -1,3 +1,20 @@
+2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* .gitignore: Add src-* and remove gcc.
+
+	* Makefile (SRC): New.
+	(gcc-%): Likewise.
+	(check-spec-%): Likewise.
+	(+one-%): Likewise.
+
+	* gcc-build: Source ./gcc.options.
+	Don't set GCC.
+
+	* gcc-update: Source ./gcc.options.  Compare against the
+	last commit.
+
+	* gcc.options: New.
+
 2012-03-24  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Run ./contrib/gcc_update --touch and generate

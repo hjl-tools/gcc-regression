@@ -1,4 +1,6 @@
-SRC=gcc
+ifndef SRC
+SRC=src-trunk
+endif
 
 ifeq ($(GCC),gcc-avx)
 SPEC-GCC=$(GCC)
@@ -80,7 +82,7 @@ CONFIG-FLAGS+=$(CONFIG_FLAGS)
 
 PREFIX?=/usr/local
 ifeq (yes,$(BUILD-SERVER))
-ifneq ($(GCC),4.4)
+ifneq ($(SRC),src-4.4)
 LANG-FLAGS?=--enable-languages=c,c++,fortran,lto
 else
 LANG-FLAGS?=--enable-languages=c,c++,fortran
@@ -89,22 +91,22 @@ CHECK=gcc-tar-file
 else # BUILD-SERVER
 ifeq (,$(wildcard spec))
 CHECK=check-gcc
-ifneq ($(GCC),4.4)
+ifneq ($(SRC),src-4.4)
 LANG-FLAGS?=--enable-languages=c,c++,fortran,java,lto,objc
 endif
 else # spec
 CHECK=check-spec
 PREFIX=$(PWD)/usr
-ifneq ($(GCC),4.4)
+ifneq ($(SRC),src-4.4)
 LANG-FLAGS?=--enable-languages=c,c++,fortran,lto
-ifneq ($(GCC),4.5)
-ifneq ($(GCC),4.6)
+ifneq ($(SRC),src-4.5)
+ifneq ($(SRC),src-4.6)
 # Enable x32 if possible
 ifneq ($(ENABLE_X32),no)
 override ENABLE_X32=yes
 endif
-endif # 4.6
-endif # 4.5
+endif # src-4.6
+endif # src-4.5
 else
 LANG-FLAGS?=--enable-languages=c,c++,fortran
 endif # src-4.4
@@ -127,7 +129,7 @@ CONFIG-FLAGS+=--with-multilib-list=m32,m64,mx32
 # Enable only C, C++, Fortran and Objective C for x32.
 LANG-FLAGS=--enable-languages=c,c++,fortran,objc
 else
-ifeq ($(GCC),trunk)
+ifeq ($(SRC),src-trunk)
 #WITH-PLL=yes
 endif
 endif
@@ -212,6 +214,9 @@ RELEASE-DIR=$(PWD)/release
 
 gcc: config $(BUILD)
 
+gcc-%:
+	$(MAKE) gcc SRC=src-$*
+
 .DEFAULT:
 	$(TIME) $(MAKE) $(PARALLELMFLAGS) -C $(BUILD-DIR) $@ \
 		$(FLAGS-TO-PASS)
@@ -273,6 +278,12 @@ check-spec-cpu-%:
 	  Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc` on $$a" \
 	    $$MAILTO < $$log.error; \
 	done
+
+check-spec-%:
+	$(MAKE) check-spec SRC=src-$* GCC=gcc-$*
+
+one-%:
+	$(MAKE) one SRC=src-$* GCC=gcc-$*
 
 one:
 	if $(MAKE) gcc; then \

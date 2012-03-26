@@ -80,7 +80,7 @@ STATUS=$?
 case $STATUS in
 0)
   CURRENT_LOG=makelog.$(cat $current_revision).$GCC.$ARCH$OPTION
-  make ARCH=$ARCH GCC=$GCC one CONFIG_FLAGS="$CONFIG_FLAGS" \
+  make ARCH=$ARCH one-$GCC CONFIG_FLAGS="$CONFIG_FLAGS" \
        ENABLE_X32=$ENABLE_X32 \
        CURRENT_LOG=$CURRENT_LOG > $CURRENT_LOG 2>&1
   STATUS=$?

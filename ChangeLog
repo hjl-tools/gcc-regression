@@ -1,5 +1,9 @@
 2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build: Replace "GCC=$GCC one" with one-$GCC.
+
+2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* gcc-build: Pass $GCC to ./gcc-update.  Quit if there are no
 	no relevant changes.
 

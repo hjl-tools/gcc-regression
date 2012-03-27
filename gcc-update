@@ -136,7 +136,7 @@ if [ -z "$files" ]; then
 		  awk -F@ '{ print $2 }')
   echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
   if [ -f $current_revision ]; then
-    echo No relevant changes on $branch since revision $LAST_REVISION!
+    echo No relevant changes on $branch since revision $(cat $current_revision)
     # Return 2 to indicate no relevant changes.
     exit 2
   else

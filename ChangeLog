@@ -1,5 +1,9 @@
 2012-03-27  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-update: Use $current_revision if it exists.
+
+2012-03-27  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile (ARCHES): Add x32 if ENABLE_X32 is yes.
 
 2012-03-26  H.J. Lu  <hongjiu.lu@intel.com>

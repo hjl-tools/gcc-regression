@@ -173,6 +173,9 @@ endif
 ifndef ARCHES
 ARCHES=$(ARCH)
 ifeq (x86_64,$(ARCH))
+ifeq ($(ENABLE_X32),yes)
+ARCHES+=x32
+endif
 ARCHES+=i686
 endif
 endif

@@ -70,6 +70,7 @@ current_revision=current_revision.$GCC.$ARCH$OPTION
 current_success=current_success.$GCC.$ARCH$OPTION
 
 if [ -f $current_revision ]; then
+  LAST_SUCCESS=$(cat $current_success)
   LAST_LOG=makelog.$LAST_SUCCESS.$GCC.$ARCH$OPTION
   [ -f $LAST_LOG ] || LAST_LOG=
 fi

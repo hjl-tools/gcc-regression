@@ -1,3 +1,8 @@
+2012-05-11  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (LANG-FLAGS): Limit x32 to C, C++, Fortran and
+	Objective C only for GCC 4.7.
+
 2012-04-04  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build: Set LAST_SUCCESS.

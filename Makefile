@@ -126,8 +126,10 @@ CONFIG-FLAGS+=--with-demangler-in-ld
 ifeq ($(ENABLE_X32),yes)
 # Enable x32 run-time libraries.
 CONFIG-FLAGS+=--with-multilib-list=m32,m64,mx32
-# Enable only C, C++, Fortran and Objective C for x32.
+ifeq ($(SRC),src-4.7)
+# Enable only C, C++, Fortran and Objective C for x32 in GCC 4.7.
 LANG-FLAGS=--enable-languages=c,c++,fortran,objc
+endif
 else
 ifeq ($(SRC),src-trunk)
 #WITH-PLL=yes

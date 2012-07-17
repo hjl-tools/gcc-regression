@@ -1,3 +1,7 @@
+2012-07-17  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-build: Kill hanged build process.
+
 2012-05-11  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (LANG-FLAGS): Limit x32 to C, C++, Fortran and

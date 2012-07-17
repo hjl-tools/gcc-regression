@@ -51,8 +51,25 @@ trap 'rm -f lock; exit 1' 1 2 12 15
 if [ -L lock ]; then
   BUILD_PID=$(readlink lock)
   if kill -0 $BUILD_PID > /dev/null 2>&1; then
-    echo Build process $BUILD_PID is running!
-    exit 1
+    if [ -d spec ]; then
+      timeout="-ctime +2"
+    else
+      timeout="-cmin +240"
+    fi
+    lock=$(find lock $timeout)
+    if [ -n "$lock" ]; then
+      echo Killing hanged build process $BUILD_PID!
+      kill $BUILD_PID > /dev/null 2>&1
+      sleep 5
+      kill -9 $BUILD_PID > /dev/null 2>&1
+      sleep 5
+      if kill -0 $BUILD_PID > /dev/null 2>&1; then
+        echo Failed to kill hanged build process $BUILD_PID!
+      fi
+    else
+      echo Build process $BUILD_PID is running!
+      exit 1
+    fi
   fi
 fi
 

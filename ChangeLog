@@ -1,5 +1,9 @@
 2012-07-19  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build: Increase timeout grace period.
+
+2012-07-19  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* gcc-update: Add "-w" to "git diff".
 
 2012-07-17  H.J. Lu  <hongjiu.lu@intel.com>

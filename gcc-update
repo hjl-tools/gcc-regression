@@ -80,7 +80,7 @@ case "$status" in
     fi
   done
   # Check if changes are relevant.
-  files=$(git diff --stat $last_commit $origin |
+  files=$(git diff -w --stat $last_commit $origin |
 	  grep "|" |
 	  awk '{ print $1 }' |
 	  grep -v /ada/ |

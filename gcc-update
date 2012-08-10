@@ -27,14 +27,21 @@ master)
   ;;
 *)
   svn_branch=$branch
-  GCC_VERSION=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+  GCC_VERSION=
   ;;
 esac
 
-if [ "$GCC" != "$GCC_VERSION" ]; then
-  echo "$GCC_DIR is GCC $GCC_VERSION source tree, expecting GCC $GCC source tree"
-  exit 1
-fi
+check_gcc_version ()
+{
+  if [ -z "$GCC_VERSION" ]; then
+    GCC_VERSION=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+  fi
+  if [ "$GCC" != "$GCC_VERSION" ]; then
+    echo "$GCC_DIR is GCC $GCC_VERSION source tree, expecting GCC $GCC source tree"
+    exit 1
+  fi
+  ./contrib/gcc_update --touch >> $LOG
+}
 
 current_revision=../current_revision.$GCC.$ARCH$OPTION
 
@@ -140,8 +147,8 @@ if [ -z "$files" ]; then
     # Return 2 to indicate no relevant changes.
     exit 2
   else
+    check_gcc_version
     echo $LAST_REVISION > $current_revision
-    ./contrib/gcc_update --touch >> $LOG
     exit 0
   fi
 fi
@@ -154,7 +161,7 @@ if [ $? != 0 ]; then
       $(sed -e "s/^MAILTO=//" -e "s/.*=.*//" ../mail.conf) < $LOG
   exit 1
 fi
-./contrib/gcc_update --touch >> $LOG
+check_gcc_version
 
 CURRENT_REVISION=$(git log -1 |
 		   grep git-svn-id |

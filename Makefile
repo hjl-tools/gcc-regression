@@ -248,10 +248,12 @@ check-spec-cpu-2000-%:
 check-spec-cpu-2006-%:
 	$(MAKE) ARCHES=$* check-spec-cpu-2006
 
-check-spec-cpu-%:
+speckill:
 	-$(KILLALL) -9 runspec
 	-$(KILLALL) -9 specmake
 	-$(KILLALL) -9 specinvoke
+
+check-spec-cpu-%: speckill
 	export PATH=$(PREFIX)/bin:$$PATH; \
 	export LD_LIBRARY_PATH=$(PREFIX)/libx32:$(PREFIX)/lib64:$(PREFIX)/lib:$$LD_LIBRARY_PATH;\
 	pwd=`pwd`; \

@@ -1,5 +1,10 @@
 2012-08-13  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* Makefile (speckill): New.
+	(check-spec-cpu-%): Depend on speckill.
+
+2012-08-13  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile (SPEC-GCC): Define only if not defined.
 
 2012-07-19  H.J. Lu  <hongjiu.lu@intel.com>

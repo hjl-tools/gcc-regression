@@ -2,12 +2,12 @@ ifndef SRC
 SRC=src-trunk
 endif
 
+ifndef SPEC-GCC
 ifeq ($(GCC),gcc-avx)
 SPEC-GCC=$(GCC)
-endif
-
-ifndef SPEC-GCC
+else
 SPEC-GCC=gcc
+endif
 endif
 
 SOURCE-DIR=../$(SRC)

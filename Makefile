@@ -53,8 +53,8 @@ KILLALL?=killall
 
 CHECK-SPEC?=check-spec-cpu-2000 check-spec-cpu-2006
 
-BUILD-SPEC=no
-CLEAN-SPEC=yes
+BUILD-SPEC?=no
+CLEAN-SPEC?=yes
 
 ARCH?=$(shell arch)
 BUILD-ARCH:=$(shell arch)
@@ -257,6 +257,9 @@ check-spec-cpu-%: speckill
 	export PATH=$(PREFIX)/bin:$$PATH; \
 	export LD_LIBRARY_PATH=$(PREFIX)/libx32:$(PREFIX)/lib64:$(PREFIX)/lib:$$LD_LIBRARY_PATH;\
 	pwd=`pwd`; \
+	if [ "$(BUILD-SPEC)" = yes ]; then \
+	  action="--action build"; \
+	fi; \
 	for a in $(ARCHES); do \
 	  log=$$pwd/spec/$*/$$a/spec.log; \
 	  config=lnx-$$a-$(SPEC-GCC).cfg; \
@@ -269,7 +272,7 @@ check-spec-cpu-%: speckill
 	  else clean=scrub; fi; \
 	  cd $$pwd/spec/$*/$$a/spec && . ./shrc && \
 	    runspec -c $$config -a $$clean all > $$log 2>&1 && \
-	    runspec -c $$config $$SPEC_FLAGS >> $$log 2>&1; \
+	    runspec -c $$config $$SPEC_FLAGS $$action >> $$log 2>&1; \
 	  status=$$?; \
 	  echo "With runspec -c $$config $$SPEC_FLAGS" > $$log.error; \
 	  if [ $$status = 0 ]; then \

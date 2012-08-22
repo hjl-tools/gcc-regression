@@ -1,3 +1,7 @@
+2012-08-22  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-update: Grep "^git-svn-id".
+
 2012-08-14  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (check-spec-cpu-%): Check BUILD-SPEC.

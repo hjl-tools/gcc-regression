@@ -47,7 +47,7 @@ current_revision=../current_revision.$GCC.$ARCH$OPTION
 
 if [ -f $current_revision ]; then
   last_commit=$(cat $current_revision)
-  last_commit=$(git log --grep "git-svn-id.*@$last_commit" |
+  last_commit=$(git log --grep "^git-svn-id.*@$last_commit" |
 		head -1 |
 		awk '{ print $2 }')
 else
@@ -138,7 +138,7 @@ esac
 
 if [ -z "$files" ]; then
   LAST_REVISION=$(git log -1 |
-		  grep git-svn-id |
+		  grep "^git-svn-id" |
 		  awk '{ print $2 }' |
 		  awk -F@ '{ print $2 }')
   echo "[$svn_branch revision $LAST_REVISION]" > gcc/REVISION
@@ -164,7 +164,7 @@ fi
 check_gcc_version
 
 CURRENT_REVISION=$(git log -1 |
-		   grep git-svn-id |
+		   grep "^git-svn-id" |
 		   awk '{ print $2 }' |
 		   awk -F@ '{ print $2 }')
 

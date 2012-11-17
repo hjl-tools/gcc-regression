@@ -78,9 +78,11 @@ PARALLELMFLAGS:=-j $(NUM-CPUS)
 endif
 endif
 
+VERSION=$(shell cat $(SRC)/gcc/BASE-VER)
+
 CONFIG-FLAGS+=$(CONFIG_FLAGS)
 
-PREFIX?=/usr/local
+PREFIX?=/usr/$(VERSION)
 ifeq (yes,$(BUILD-SERVER))
 ifneq ($(SRC),src-4.4)
 LANG-FLAGS?=--enable-languages=c,c++,fortran,lto

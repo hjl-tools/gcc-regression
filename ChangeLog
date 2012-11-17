@@ -1,3 +1,7 @@
+2012-11-16  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-build: Also kill make, runspec, specmake and specinvoke.
+
 2012-08-22  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Properly grep "git-svn-id".

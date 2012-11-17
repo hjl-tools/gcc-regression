@@ -66,6 +66,10 @@ if [ -L lock ]; then
       if kill -0 $BUILD_PID > /dev/null 2>&1; then
         echo Failed to kill hanged build process $BUILD_PID!
       fi
+      killall -9 make
+      killall -9 runspec
+      killall -9 specmake
+      killall -9 specinvoke
     else
       echo Build process $BUILD_PID is running!
       exit 1

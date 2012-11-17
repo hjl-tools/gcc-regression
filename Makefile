@@ -252,6 +252,7 @@ speckill:
 	-$(KILLALL) -9 runspec
 	-$(KILLALL) -9 specmake
 	-$(KILLALL) -9 specinvoke
+	-$(KILLALL) -9 specperl
 
 check-spec-cpu-%: speckill
 	export PATH=$(PREFIX)/bin:$$PATH; \

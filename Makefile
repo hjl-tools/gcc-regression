@@ -170,6 +170,10 @@ endif
 
 ifeq (yes,$(LTO_BUILD))
 CONFIG-FLAGS+=--with-build-config=bootstrap-lto
+ifeq (yes,$(PROFILEDBOOTSTRAP))
+# Disable -Werror with bootstrap-lto and profiledbootstrap.
+CONFIG-FLAGS+=--disable-werror
+endif
 endif
 
 #FLAGS-TO-PASS+=CXXFLAGS="$(BOOT_CFLAGS)"

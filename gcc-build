@@ -31,6 +31,8 @@ while [ 1 = 1 ]; do
     *--with-cpu=core-avx2*)
       OPTION=.core-avx2
       ;;
+    *--with-arch=*)
+      ;;
     *)
       echo $0: Unknown option: $1
       ;;

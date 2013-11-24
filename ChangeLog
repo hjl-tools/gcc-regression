@@ -1,5 +1,9 @@
 2013-11-24  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build (OPTION): Handle --with-arch=.
+
+2013-11-24  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* gcc-update: Also skip arc, msp430 and nds32.
 
 2013-11-24  H.J. Lu  <hongjiu.lu@intel.com>

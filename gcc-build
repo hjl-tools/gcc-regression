@@ -10,17 +10,26 @@ while [ 1 = 1 ]; do
   x--with*)
     CONFIG_FLAGS="$CONFIG_FLAGS ${1}"
     case $CONFIG_FLAGS in
-    *atom*)
+    *--with-cpu=atom*)
       OPTION=.atom
       ;;
-    *core2)
+    *--with-cpu=slm*)
+      OPTION=.slm
+      ;;
+    *--with-cpu=core2*)
       OPTION=.core2
       ;;
-    *corei7)
+    *--with-cpu=corei7*)
       OPTION=.corei7
       ;;
-    *corei7-avx)
+    *--with-cpu=corei7-avx*)
       OPTION=.corei7-avx
+      ;;
+    *--with-cpu=core-avx-i*)
+      OPTION=.core-avx-i
+      ;;
+    *--with-cpu=core-avx2*)
+      OPTION=.core-avx2
       ;;
     *)
       echo $0: Unknown option: $1

@@ -1,3 +1,8 @@
+2013-11-24  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-build (OPTION): Set with --with-cpu=.  Support slm,
+	core-avx-i and core-avx2.
+
 2013-04-29  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Also skip aarch64.

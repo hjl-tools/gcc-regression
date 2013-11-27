@@ -420,10 +420,16 @@ run-spec-cpu-%:
 	echo "With $(RUN-SPEC-FLAGS) on $(ARCHES)" | \
 	  Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc`" $(MAILTO)
 
-move:
+move-spec-cpu: move-spec-cpu-2000 move-spec-cpu-2006
+
+move-spec-cpu-2000:
 	if [ -n "$(LOG)" -a -f "$(LOG)" ]; then \
 	  grep ASCII $(LOG) | grep CINT2000 |  \
 	    awk '{ print $$4 }' | GCC=./usr/bin/gcc xargs specmv; \
+	fi
+
+move-spec-cpu-2006:
+	if [ -n "$(LOG)" -a -f "$(LOG)" ]; then \
 	  grep ASCII $(LOG) | grep CINT2006 |  \
 	    awk '{ print $$4 }' | GCC=./usr/bin/gcc xargs specmv; \
 	fi

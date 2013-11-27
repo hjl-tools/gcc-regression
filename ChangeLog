@@ -1,3 +1,10 @@
+2013-11-27  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (move): Removed.
+	(move-spec-cpu): New.
+	(move-spec-cpu-2000): Likewise.
+	(move-spec-cpu-2006): Likewise.
+
 2013-11-24  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build (OPTION): Handle --with-arch=.

@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Enable Turbo Boost
+
+# Check turbo/burst for NHM, WSM, SNB, IVB, HSW and SLM.
+family=$(grep "cpu family" /proc/cpuinfo | head -1 | awk '{ print $4 }')
+[ "$family" = 6 ] || exit 0
+
+model=$(grep "model" /proc/cpuinfo | head -1 | awk '{ print $3 }')
+case "$model" in
+55 | 77)
+  # SLM
+  turbo=yes
+  ;;
+26 | 30 | 31 | 46)
+  # NHM
+  turbo=yes
+  ;;
+37 | 44 | 47)
+  # WSM
+  turbo=yes
+  ;;
+42 | 45)
+  # SNB
+  turbo=yes
+  ;;
+58 | 62)
+  # IVB
+  turbo=yes
+  ;;
+60 | 69 | 70)
+  # HSW
+  turbo=yes
+  ;;
+*)
+  turbo=no
+esac
+
+[ "$turbo" == "yes" ] || exit 0
+
+# Turn on Turbo boost with Intel P-state driver.
+if [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]
+then
+  echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo
+  # Set all CPU scaling_governors to powersave. 
+  scaling_governor=powersave
+else
+  # Set all CPU scaling_governors to ondemand.
+  scaling_governor=ondemand
+fi
+
+find /sys -name scaling_available_governors | while read i
+do 
+  d=$(dirname $i)
+  if [ -f $d/scaling_governor ] \
+     && grep -q $scaling_governor $d/scaling_available_governors
+  then
+    echo $scaling_governor > $d/scaling_governor
+  fi
+done

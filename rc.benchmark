@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# Run this script to minimize performance fluctuation.
+
+# Disable kernel audit.
+/sbin/auditctl -e 0 > /dev/null
+
+# Disable address randomization when loading shared libraries.
+[ -f /proc/sys/kernel/randomize_va_space ] &&
+  echo 0 > /proc/sys/kernel/randomize_va_space
+
+# Check turbo/burst for NHM, WSM, SNB, IVB, HSW and SLM.
+family=$(grep "cpu family" /proc/cpuinfo | head -1 | awk '{ print $4 }')
+[ "$family" = 6 ] || exit 0
+
+model=$(grep "model" /proc/cpuinfo | head -1 | awk '{ print $3 }')
+case "$model" in
+55 | 77)
+  # SLM
+  turbo=yes
+  ;;
+26 | 30 | 31 | 46)
+  # NHM
+  turbo=yes
+  ;;
+37 | 44 | 47)
+  # WSM
+  turbo=yes
+  ;;
+42 | 45)
+  # SNB
+  turbo=yes
+  ;;
+58 | 62)
+  # IVB
+  turbo=yes
+  ;;
+60 | 69 | 70)
+  # HSW
+  turbo=yes
+  ;;
+*)
+  turbo=no
+esac
+
+[ "$turbo" == "yes" ] || exit 0
+
+# Can't set a fixed CPU frequency with Intel P-state driver.  Pass
+# intel_pstate=disable to kernel at boot to disable Intel P-state driver.
+[ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] && exit 0
+
+# Set all CPU scaling_governors to userspace and set frequency to the
+# second highest frequency.
+find /sys -name scaling_available_frequencies | while read i
+do 
+  d=$(dirname $i)
+  if [ -f $d/scaling_available_governors \
+       -a -f $d/scaling_governor \
+       -a -f $d/scaling_setspeed ] \
+      && grep -q userspace $d/scaling_available_governors
+  then
+    echo userspace > $d/scaling_governor
+    f=$(awk '{ print $2 }' $i)
+    echo $f > $d/scaling_setspeed
+  fi
+done

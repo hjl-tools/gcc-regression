@@ -47,7 +47,12 @@ esac
 
 # Can't set a fixed CPU frequency with Intel P-state driver.  Pass
 # intel_pstate=disable to kernel at boot to disable Intel P-state driver.
-[ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] && exit 0
+if [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ]
+then
+  echo "Can't set a fixed CPU frequency with Intel P-state driver."
+  echo 'Please pass "intel_pstate=disable" to kernel at boot to disable it.'
+  exit 1
+fi
 
 # Set all CPU scaling_governors to userspace and set frequency to the
 # second highest frequency.

@@ -1,5 +1,9 @@
 2013-12-03  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* rc.benchmark: Issue an error for Intel P-state driver.
+
+2013-12-03  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* rc.turbo: New script.
 
 2013-12-03  H.J. Lu  <hongjiu.lu@intel.com>

@@ -1,3 +1,7 @@
+2013-12-09  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* README: New file.
+
 2013-12-08  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build (OPTION): Support --with-cpu=intel.

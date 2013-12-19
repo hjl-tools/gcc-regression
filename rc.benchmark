@@ -5,6 +5,9 @@
 # Disable kernel audit.
 /sbin/auditctl -e 0 > /dev/null
 
+# Stop crond
+systemctl stop crond
+
 # Disable address randomization when loading shared libraries.
 [ -f /proc/sys/kernel/randomize_va_space ] &&
   echo 0 > /proc/sys/kernel/randomize_va_space

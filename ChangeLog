@@ -1,3 +1,7 @@
+2013-12-19  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* rc.benchmark: Stop crond.
+
 2013-12-09  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* README: New file.

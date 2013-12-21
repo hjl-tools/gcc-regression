@@ -104,6 +104,7 @@ case "$status" in
 	  grep -v cygwin |
 	  grep -v darwin |
 	  grep -v djgpp |
+	  grep -v fixincludes/ |
 	  grep -v freebsd |
 	  grep -v hpux |
 	  grep -v interix |

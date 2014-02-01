@@ -69,7 +69,7 @@ esac
 
 # Check if we need to fast-forward
 git fetch > $LOG 2>&1
-status=$(git status | head -2 | grep -v "On branch")
+status=$(git status | grep -v "On branch" | head -4")
 case "$status" in
 *clean*|*"can be fast-forwarded"*)
   origin=origin/$branch

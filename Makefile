@@ -264,6 +264,7 @@ check-spec-cpu-%: speckill
 	export PATH=$(PREFIX)/bin:$$PATH; \
 	export LD_LIBRARY_PATH=$(PREFIX)/libx32:$(PREFIX)/lib64:$(PREFIX)/lib:$$LD_LIBRARY_PATH;\
 	pwd=`pwd`; \
+	ulimit -s 65536; \
 	if [ "$(BUILD-SPEC)" = yes ]; then \
 	  action="--action build"; \
 	fi; \
@@ -372,6 +373,7 @@ tune-spec-cpu-%:
 	export LD_LIBRARY_PATH=$(PREFIX)/libx32:$(PREFIX)/lib64:$(PREFIX)/lib:$$LD_LIBRARY_PATH;\
 	pwd=`pwd`; \
 	RESULT=Passed; \
+	ulimit -s 65536; \
 	if [ "$(BUILD-SPEC)" = yes ]; then \
 	  action="--action build"; \
 	fi; \
@@ -409,6 +411,7 @@ run-spec-cpu-%:
 	export LD_LIBRARY_PATH=$(PREFIX)/libx32:$(PREFIX)/lib64:$(PREFIX)/lib:$$LD_LIBRARY_PATH;\
 	pwd=`pwd`; \
 	RESULT=Passed; \
+	ulimit -s 65536; \
 	for a in $(ARCHES); do \
 	  config=lnx-$$a-$(SPEC-GCC).cfg; \
 	  cd $$pwd/spec/$*/$$a/spec && . ./shrc && \

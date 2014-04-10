@@ -1,3 +1,9 @@
+2014-04-10  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (check-spec-cpu-%): Add "ulimit -s 65536".
+	(tune-spec-cpu-%): Likewise.
+	(run-spec-cpu-%): Likewise.
+
 2014-02-03  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Fix a typo.

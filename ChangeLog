@@ -1,3 +1,7 @@
+2014-11-18  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (CONFIG-FLAGS): Add --disable-libcc1 for bootstrap-lto.
+
 2014-04-10  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (check-spec-cpu-%): Add "ulimit -s 65536".

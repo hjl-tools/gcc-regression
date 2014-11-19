@@ -170,6 +170,8 @@ endif
 
 ifeq (yes,$(LTO_BUILD))
 CONFIG-FLAGS+=--with-build-config=bootstrap-lto
+# Disable libcc1 with bootstrap-lto.
+CONFIG-FLAGS+=--disable-libcc1
 ifeq (yes,$(PROFILEDBOOTSTRAP))
 # Disable -Werror with bootstrap-lto and profiledbootstrap.
 CONFIG-FLAGS+=--disable-werror

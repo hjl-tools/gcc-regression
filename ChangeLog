@@ -1,5 +1,9 @@
 2014-12-01  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* Makefile (PATH): Prepend /usr/local32/bin.
+
+2014-12-01  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile (RUNTESTFLAGS): Add -fpic for PIC.
 	* gcc-build: Support --with-pic.
 

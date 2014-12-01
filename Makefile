@@ -214,6 +214,10 @@ ifneq ($(RUNTESTFLAGS),)
 FLAGS-TO-PASS+=RUNTESTFLAGS="$(RUNTESTFLAGS)"
 endif
 
+ifeq (i686,$(ARCH))
+PATH:=/usr/local32/bin:$(PATH)
+endif
+
 ifeq (x86_64,$(BUILD-ARCH))
 ifeq (i686,$(ARCH))
 CC=gcc -m32

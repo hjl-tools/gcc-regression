@@ -192,10 +192,25 @@ endif
 
 ifeq (x86_64,$(ARCH))
 ifeq ($(ENABLE_X32),yes)
+ifeq ($(PIC),yes)
+RUNTESTFLAGS=--target_board='unix{-mx32\ -fpic}'
+else
 RUNTESTFLAGS=--target_board='unix{-mx32}'
+endif
+else
+ifeq ($(PIC),yes)
+RUNTESTFLAGS=--target_board='unix{-m32\ -fpic,-fpic}'
 else
 RUNTESTFLAGS=--target_board='unix{-m32,}'
 endif
+endif
+else
+ifeq ($(PIC),yes)
+RUNTESTFLAGS=--target_board='unix{-fpic}'
+endif
+endif
+
+ifneq ($(RUNTESTFLAGS),)
 FLAGS-TO-PASS+=RUNTESTFLAGS="$(RUNTESTFLAGS)"
 endif
 

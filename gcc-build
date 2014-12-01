@@ -36,6 +36,10 @@ while [ 1 = 1 ]; do
       ;;
     *--with-arch=*)
       ;;
+    *--with-pic)
+      PIC=yes
+      OPTION=${OPTION}.pic
+      ;;
     *)
       echo $0: Unknown option: $1
       ;;
@@ -118,6 +122,7 @@ case $STATUS in
   CURRENT_LOG=makelog.$(cat $current_revision).$GCC.$ARCH$OPTION
   make ARCH=$ARCH one-$GCC CONFIG_FLAGS="$CONFIG_FLAGS" \
        ENABLE_X32=$ENABLE_X32 \
+       PIC=$PIC \
        CURRENT_LOG=$CURRENT_LOG > $CURRENT_LOG 2>&1
   STATUS=$?
   if [ $STATUS = 0 ]; then

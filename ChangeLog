@@ -1,3 +1,8 @@
+2014-12-01  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (RUNTESTFLAGS): Add -fpic for PIC.
+	* gcc-build: Support --with-pic.
+
 2014-11-21  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (CONFIG-FLAGS): Don't add --disable-libcc1 for

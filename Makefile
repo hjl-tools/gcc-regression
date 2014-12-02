@@ -215,7 +215,8 @@ FLAGS-TO-PASS+=RUNTESTFLAGS="$(RUNTESTFLAGS)"
 endif
 
 ifeq (i686,$(ARCH))
-PATH:=/usr/local32/bin:$(PATH)
+PATH32?=/usr/local32/bin
+PATH:=$(PATH32):$(PATH)
 endif
 
 ifeq (x86_64,$(BUILD-ARCH))

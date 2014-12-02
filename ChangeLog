@@ -1,5 +1,9 @@
 2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build (CONFIG_FLAGS): Dont add --with-pic.
+
+2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile (RUNTESTFLAGS): Simplify PIC test support.
 
 2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>

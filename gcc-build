@@ -7,6 +7,11 @@ ARCH=$(arch)
 OPTION=
 while [ 1 = 1 ]; do
   case x"${1}" in
+  x--with-pic)
+    PIC=yes
+    OPTION=${OPTION}.pic
+    shift
+    ;;
   x--with*)
     CONFIG_FLAGS="$CONFIG_FLAGS ${1}"
     case $CONFIG_FLAGS in
@@ -35,10 +40,6 @@ while [ 1 = 1 ]; do
       OPTION=.core-avx2
       ;;
     *--with-arch=*)
-      ;;
-    *--with-pic)
-      PIC=yes
-      OPTION=${OPTION}.pic
       ;;
     *)
       echo $0: Unknown option: $1

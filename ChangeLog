@@ -1,5 +1,12 @@
 2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* Makefile (MODEL): New.
+	(EXTRA-TEST-FLAGS): Likewise.
+	(RUNTESTFLAGS): Support EXTRA-TEST-FLAGS.
+	* gcc-build: Support --with-model=medium and --with-model=large.
+
+2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* gcc-build (CONFIG_FLAGS): Dont add --with-pic.
 
 2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>

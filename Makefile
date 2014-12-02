@@ -190,23 +190,24 @@ ARCHES+=i686
 endif
 endif
 
+ifeq ($(PIC),yes)
+override PIC:=-fpic
+endif
+
+ifneq ($(PIC),)
+empty:=
+space:= $(empty)\ $(empty)
+endif
+
 ifeq (x86_64,$(ARCH))
 ifeq ($(ENABLE_X32),yes)
-ifeq ($(PIC),yes)
-RUNTESTFLAGS=--target_board='unix{-mx32\ -fpic}'
+RUNTESTFLAGS=--target_board='unix{-mx32$(space)$(PIC)}'
 else
-RUNTESTFLAGS=--target_board='unix{-mx32}'
+RUNTESTFLAGS=--target_board='unix{-m32$(space)$(PIC),$(PIC)}'
 endif
 else
-ifeq ($(PIC),yes)
-RUNTESTFLAGS=--target_board='unix{-m32\ -fpic,-fpic}'
-else
-RUNTESTFLAGS=--target_board='unix{-m32,}'
-endif
-endif
-else
-ifeq ($(PIC),yes)
-RUNTESTFLAGS=--target_board='unix{-fpic}'
+ifneq ($(PIC),)
+RUNTESTFLAGS=--target_board='unix{$(PIC)}'
 endif
 endif
 

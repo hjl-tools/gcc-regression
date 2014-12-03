@@ -1,3 +1,11 @@
+2014-12-03  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (MODEL): Removed.
+	(EXTRA-TEST-FLAGS): Combine PIC, MEDIUM_MODEL and LARGE_MODEL.
+	(RUNTESTFLAGS): Don't run PIC for x86-64.
+	* gcc-build (MODEL): Removed.
+	Pass MEDIUM_MODEL and LARGE_MODEL to make.
+
 2014-12-02  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (MODEL): New.

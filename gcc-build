@@ -9,13 +9,11 @@ while [ 1 = 1 ]; do
   case x"${1}" in
   x--with-model=medium)
     MEDIUM_MODEL=yes
-    MODEL=medium
     OPTION=${OPTION}.medium
     shift
     ;;
   x--with-model=large)
     LARGE_MODEL=yes
-    MODEL=large
     OPTION=${OPTION}.large
     shift
     ;;
@@ -78,12 +76,8 @@ done
 . ./gcc.options
 
 if [ -n "$MEDIUM_MODEL$LARGE_MODEL" ]; then
-  if [ x"$MEDIUM_MODEL$LARGE_MODEL" = xyesyes ]; then
-    echo "--with-model=medium --with-model=large cannot be used together"
-    exit 1
-  fi
   if [ x"$ARCH" = xi686 -o x"$ENABLE_X32" = xyes ]; then
-    echo "--with-model=$MODEL cannot be with i686 or x32"
+    echo "--with-model={medium|large} cannot be used with i686 nor x32"
     exit 1
   fi
 fi
@@ -148,7 +142,8 @@ case $STATUS in
   make ARCH=$ARCH one-$GCC CONFIG_FLAGS="$CONFIG_FLAGS" \
        ENABLE_X32=$ENABLE_X32 \
        PIC=$PIC \
-       MODEL=$MODEL \
+       MEDIUM_MODEL=$MEDIUM_MODEL \
+       LARGE_MODEL=$LARGE_MODEL \
        CURRENT_LOG=$CURRENT_LOG > $CURRENT_LOG 2>&1
   STATUS=$?
   if [ $STATUS = 0 ]; then

@@ -190,24 +190,34 @@ ARCHES+=i686
 endif
 endif
 
-ifneq ($(MODEL),)
-override MODEL:=-mcmodel=$(MODEL)
-endif
-
 ifeq ($(PIC),yes)
 override PIC:=-fpic
-endif
-
-ifneq ($(PIC),)
+EXTRA-TEST-FLAGS:=$(PIC)
 empty:=
 space:= $(empty)\ $(empty)
 endif
 
-ifneq ($(MODEL),)
+ifneq ($(MEDIUM_MODEL),)
+override MEDIUM_MODEL:=-mcmodel=medium
+ifneq ($(EXTRA-TEST-FLAGS),)
+EXTRA-TEST-FLAGS:=$(EXTRA-TEST-FLAGS),$(MEDIUM_MODEL)
 ifneq ($(PIC),)
-EXTRA-TEST-FLAGS:=$(PIC)\ $(MODEL)
+EXTRA-TEST-FLAGS:=$(EXTRA-TEST-FLAGS),$(PIC)\ $(MEDIUM_MODEL)
+endif
 else
-EXTRA-TEST-FLAGS:=$(MODEL)
+EXTRA-TEST-FLAGS:=$(MEDIUM_MODEL)
+endif
+endif
+
+ifneq ($(LARGE_MODEL),)
+override LARGE_MODEL:=-mcmodel=large
+ifneq ($(EXTRA-TEST-FLAGS),)
+EXTRA-TEST-FLAGS:=$(EXTRA-TEST-FLAGS),$(LARGE_MODEL)
+ifneq ($(PIC),)
+EXTRA-TEST-FLAGS:=$(EXTRA-TEST-FLAGS),$(PIC)\ $(LARGE_MODEL)
+endif
+else
+EXTRA-TEST-FLAGS:=$(LARGE_MODEL)
 endif
 endif
 
@@ -218,7 +228,7 @@ else
 ifneq ($(EXTRA-TEST-FLAGS),)
 RUNTESTFLAGS=--target_board='unix{$(EXTRA-TEST-FLAGS)}'
 else
-RUNTESTFLAGS=--target_board='unix{-m32$(space)$(PIC),$(PIC)}'
+RUNTESTFLAGS=--target_board='unix{-m32,}'
 endif
 endif
 else

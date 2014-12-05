@@ -1,3 +1,9 @@
+2014-12-05  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-build (SPEC_TIMEOUT): New.
+	(TIMEOUT): Likewise.
+	Use SPEC_TIMEOUT and TIMEOUT for timeout.
+
 2014-12-03  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (MODEL): Removed.

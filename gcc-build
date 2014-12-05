@@ -89,9 +89,11 @@ if [ -L lock ]; then
   BUILD_PID=$(readlink lock)
   if kill -0 $BUILD_PID > /dev/null 2>&1; then
     if [ -d spec ]; then
-      timeout="-ctime +3"
+      SPEC_TIMEOUT=${SPEC_TIMEOUT:-3}
+      timeout="-ctime +$SPEC_TIMEOUT"
     else
-      timeout="-cmin +300"
+      TIMEOUT=${TIMEOUT:-300}
+      timeout="-cmin +$TIMEOUT"
     fi
     lock=$(find lock $timeout)
     if [ -n "$lock" ]; then

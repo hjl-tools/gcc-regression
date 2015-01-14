@@ -1,3 +1,7 @@
+2015-01-14  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-update: Also skip nios2, nvptx and visium.
+
 2014-12-05  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build (SPEC_TIMEOUT): New.

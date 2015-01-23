@@ -248,8 +248,8 @@ endif
 
 ifeq (x86_64,$(BUILD-ARCH))
 ifeq (i686,$(ARCH))
-CC=gcc -m32
-CXX=g++ -m32
+CC=gcc -m32 -fno-lto
+CXX=g++ -m32 -fno-lto
 FLAGS-TO-PASS+=CC="$(CC)"
 FLAGS-TO-PASS+=CXX="$(CXX)"
 CONFIG-FLAGS+=$(ARCH)-linux

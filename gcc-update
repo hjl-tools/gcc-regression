@@ -68,6 +68,7 @@ case "$status" in
 esac
 
 # Check if we need to fast-forward
+git remote prune origin > $LOG 2>&1
 git fetch > $LOG 2>&1
 status=$(git status | grep -v "On branch" | head -4)
 case "$status" in

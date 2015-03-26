@@ -1,3 +1,7 @@
+2015-03-26  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-update: Run "git remote prune origin" before fetch.
+
 2015-01-23  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (CC): Add -fno-lto together with -m32.

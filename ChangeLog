@@ -1,3 +1,7 @@
+2015-04-13  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-update: Support GCC 5 and above.
+
 2015-03-26  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Run "git remote prune origin" before fetch.

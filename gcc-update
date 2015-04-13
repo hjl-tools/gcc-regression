@@ -35,6 +35,13 @@ check_gcc_version ()
 {
   if [ -z "$GCC_VERSION" ]; then
     GCC_VERSION=$(sed -s "s/\.[0-9]*$//" gcc/BASE-VER)
+    case $GCC_VERSION in
+    4.*)
+      ;;
+    *)
+      GCC_VERSION=$(echo $GCC_VERSION | sed -s "s/\.[0-9]*$//")
+      ;;
+    esac
   fi
   if [ "$GCC" != "$GCC_VERSION" ]; then
     echo "$GCC_DIR is GCC $GCC_VERSION source tree, expecting GCC $GCC source tree"

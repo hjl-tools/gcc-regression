@@ -1,3 +1,8 @@
+2015-07-13  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (ENABLE_MPX): New.  Set to yes if not testing GCC 4.9.
+	(CONFIG-FLAGS): Add --enable-libmpx if $(ENABLE_MPX) is yes.
+
 2015-04-13  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-update: Support GCC 5 and above.

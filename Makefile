@@ -96,6 +96,12 @@ CHECK=check-gcc
 ifneq ($(SRC),src-4.4)
 LANG-FLAGS?=--enable-languages=c,c++,fortran,java,lto,objc
 endif
+# Enable MPX if possible
+ifneq ($(ENABLE_MPX),no)
+ifneq ($(SRC),src-4.9)
+override ENABLE_MPX=yes
+endif
+endif
 else # spec
 CHECK=check-spec
 PREFIX=$(PWD)/usr
@@ -124,6 +130,10 @@ CONFIG-FLAGS+=--with-demangler-in-ld
 #CONFIG-FLAGS+=--with-cpu=nocona
 #CONFIG-FLAGS+=--disable-bootstrap
 #CONFIG-FLAGS=--enable-languages=c,c++,fortran --disable-bootstrap
+
+ifeq ($(ENABLE_MPX),yes)
+CONFIG-FLAGS+=--enable-libmpx
+endif
 
 ifeq ($(ENABLE_X32),yes)
 # Enable x32 run-time libraries.

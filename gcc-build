@@ -92,7 +92,7 @@ if [ -L lock ]; then
       SPEC_TIMEOUT=${SPEC_TIMEOUT:-3}
       timeout="-ctime +$SPEC_TIMEOUT"
     else
-      TIMEOUT=${TIMEOUT:-300}
+      TIMEOUT=${TIMEOUT:-450}
       timeout="-cmin +$TIMEOUT"
     fi
     lock=$(find lock $timeout)

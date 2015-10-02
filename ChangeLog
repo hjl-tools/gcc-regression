@@ -1,3 +1,7 @@
+2015-10-02  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-build (TIMEOUT): Increase default timeout to 450 minutes.
+
 2015-07-13  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* Makefile (ENABLE_MPX): New.  Set to yes if not testing GCC 4.9.

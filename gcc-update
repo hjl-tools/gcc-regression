@@ -100,9 +100,9 @@ case "$status" in
 	  grep "|" |
 	  awk '{ print $1 }' |
 	  grep -v /ada/ |
-	  grep -v /libada/ |
+	  grep -v libada/ |
 	  grep -v /go/ |
-	  grep -v /libgo/ |
+	  grep -v libgo/ |
 	  grep -v BASE-VER |
 	  grep -v ChangeLog |
 	  grep -v contrib/ |

@@ -1,3 +1,7 @@
+2016-02-03  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* gcc-update: Skip libada/ and libgo/, not /libada/ and /libgo/.
+
 2015-10-02  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build (TIMEOUT): Increase default timeout to 450 minutes.

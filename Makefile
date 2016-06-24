@@ -345,15 +345,17 @@ check-spec-cpu-%: speckill
 	  if [ $$status = 0 ]; then \
 	    grep -i error $$log >> $$log.error && status=1; \
 	  fi; \
-	  if [ $$status = 0 ]; then \
-	    RESULT=Passed; \
-	    MAILTO="$(MAILTO)"; \
-	  else \
-	    RESULT=Failed; \
-	    MAILTO="$(MAILTO) $(REGRESSION-MAILTO)"; \
-	  fi; \
-	  Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc` on $$a" \
-	    $$MAILTO < $$log.error; \
+	  if [ "$(MAIL-SPEC)" != no ]; then \
+	    if [ $$status = 0 ]; then \
+	      RESULT=Passed; \
+	      MAILTO="$(MAILTO)"; \
+	    else \
+	      RESULT=Failed; \
+	      MAILTO="$(MAILTO) $(REGRESSION-MAILTO)"; \
+	    fi; \
+	    Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc` on $$a" \
+	      $$MAILTO < $$log.error; \
+	    fi; \
 	done
 
 check-spec-%:
@@ -460,8 +462,10 @@ tune-spec-cpu-%:
 	    fi; \
 	  done; \
 	done; \
-	echo "With $$RUNS on $(ARCHES)" | \
-	  Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc`" $(MAILTO)
+	if [ "$(MAIL-SPEC)" != no ]; then \
+	  echo "With $$RUNS on $(ARCHES)" | \
+	    Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc`" $(MAILTO); \
+	fi
 
 run-spec-cpu: run-spec-cpu-2000 run-spec-cpu-2006
 

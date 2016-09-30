@@ -93,9 +93,6 @@ CHECK=gcc-tar-file
 else # BUILD-SERVER
 ifeq (,$(wildcard spec))
 CHECK=check-gcc
-ifneq ($(SRC),src-4.4)
-LANG-FLAGS?=--enable-languages=c,c++,fortran,java,lto,objc
-endif
 # Enable MPX if possible
 ifneq ($(ENABLE_MPX),no)
 ifneq ($(SRC),src-4.9)

@@ -1,5 +1,9 @@
 2016-09-30  H.J. Lu  <hongjiu.lu@intel.com>
 
+	* gcc-build: Grep FAIL: instead of FAIL for GCC test failures.
+
+2016-09-30  H.J. Lu  <hongjiu.lu@intel.com>
+
 	* Makefile (LANG-FLAGS): Don't set for non-SPEC build.
 
 2016-06-24  H.J. Lu  <hongjiu.lu@intel.com>

@@ -160,14 +160,14 @@ esac
 
 if [ $STATUS = 0 -a -n "$LAST_LOG" ]; then
   # Check regressions
-  grep FAIL $CURRENT_LOG | 
+  grep FAIL: $CURRENT_LOG |
     grep -v libmudflap |
     grep -v gcc.c-torture/compile/limits-exprparen.c |
     grep -v libgomp.graphite/force-parallel-6.c |
     sort > $CURRENT_LOG.fail
   grep "^ERROR" $CURRENT_LOG | sort >> $CURRENT_LOG.fail
   grep "^UNRESOLVED" $CURRENT_LOG | sort >> $CURRENT_LOG.fail
-  grep FAIL $LAST_LOG |
+  grep FAIL: $LAST_LOG |
     grep -v libmudflap |
     grep -v gcc.c-torture/compile/limits-exprparen.c |
     grep -v libgomp.graphite/force-parallel-6.c |

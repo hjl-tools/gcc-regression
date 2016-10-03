@@ -1,3 +1,8 @@
+2016-10-04  H.J. Lu  <hongjiu.lu@intel.com>
+
+	* Makefile (CONFIG-FLAGS): Support ENABLE_O3.
+	* gcc-build: Support -O3.
+
 2016-09-30  H.J. Lu  <hongjiu.lu@intel.com>
 
 	* gcc-build: Grep FAIL: instead of FAIL for GCC test failures.

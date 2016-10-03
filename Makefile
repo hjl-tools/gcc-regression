@@ -185,6 +185,12 @@ CONFIG-FLAGS+=--disable-werror
 endif
 endif
 
+ifeq (yes,$(ENABLE_O3))
+CONFIG-FLAGS+=--with-build-config='bootstrap-O3 bootstrap-debug'
+# Disable -Werror with bootstrap-O3
+CONFIG-FLAGS+=--disable-werror
+endif
+
 #FLAGS-TO-PASS+=CXXFLAGS="$(BOOT_CFLAGS)"
 
 ifndef ARCHES

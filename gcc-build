@@ -67,6 +67,11 @@ while [ 1 = 1 ]; do
     ENABLE_X32=yes
     shift
     ;;
+  x-O3)
+    OPTION=${OPTION}.O3
+    ENABLE_O3=yes
+    shift
+    ;;
   *)
     break
     ;;
@@ -143,6 +148,7 @@ case $STATUS in
   CURRENT_LOG=makelog.$(cat $current_revision).$GCC.$ARCH$OPTION
   make ARCH=$ARCH one-$GCC CONFIG_FLAGS="$CONFIG_FLAGS" \
        ENABLE_X32=$ENABLE_X32 \
+       ENABLE_O3=$ENABLE_O3 \
        PIC=$PIC \
        MEDIUM_MODEL=$MEDIUM_MODEL \
        LARGE_MODEL=$LARGE_MODEL \

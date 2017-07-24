@@ -59,13 +59,15 @@ CLEAN-SPEC?=yes
 ARCH?=$(shell arch)
 BUILD-ARCH:=$(shell arch)
 NUM-CPUS:=$(shell /usr/bin/getconf _NPROCESSORS_ONLN)
-NUM-CPUS:=$(shell if [ $(NUM-CPUS) -ge 12 ]; then echo 12; else echo $(NUM-CPUS);fi)
 
 ifdef RATE
+# Use all processors for rate.
 SPEC-2000-FLAGS+=--rate --users $(NUM-CPUS)
 SPEC-2006-FLAGS+=--rate --copies $(NUM-CPUS)
 RUN-SPEC-2000-FLAGS+=--rate --users $(NUM-CPUS)
 RUN-SPEC-2006-FLAGS+=--rate --copies $(NUM-CPUS)
+else
+NUM-CPUS:=$(shell if [ $(NUM-CPUS) -ge 12 ]; then echo 12; else echo $(NUM-CPUS);fi)
 endif
 
 ifeq (16,$(NUM-CPUS))

@@ -472,6 +472,18 @@ tune-spec-cpu-%:
 	    Mail -s "$$RESULT: SPEC CPU $*: `gcc --version | grep gcc`" $(MAILTO); \
 	fi
 
+clean-spec-cpu: clean-spec-cpu-2000 clean-spec-cpu-2006
+
+clean-spec-cpu-%:
+	pwd=`pwd`; \
+	for a in $(ARCHES); do \
+	  config=lnx-$$a-$(SPEC-GCC).cfg; \
+	  if [ $* = 2000 ]; then clean=nuke; \
+	  else clean=scrub; fi; \
+	  cd $$pwd/spec/$*/$$a/spec && . ./shrc && \
+	    runspec -c $$config -a $$clean all; \
+	done
+
 run-spec-cpu: run-spec-cpu-2000 run-spec-cpu-2006
 
 run-spec-cpu-%:

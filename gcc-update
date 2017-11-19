@@ -82,11 +82,11 @@ case "$status" in
 *clean*|*"can be fast-forwarded"*)
   origin=origin/$branch
   skip_cpus="aarch64 alpha arc arm avr avr32 bfin c6x cr16 cris epiphany
-	     fr30 frv h8300 hppa ia64 iq2000 lm32 m32c m32r m68k mcore
-	     mep microblaze mips mmix mn10300 moxie msp430 nds32 nios2
-	     nvptx pa pdp11 picochip powerpc rl78 rs6000 rx s390 score
-	     sh sh64 sparc spu stormy16 tilegx tilepro v850 vax visium
-	     vms xtensa"
+	     fr30 frv ft32 h8300 hppa ia64 iq2000 lm32 m32c m32r m68k
+	     mcore mep microblaze mips mmix mn10300 moxie msp430 nds32
+	     nios2 nvptx pa pdp11 picochip powerpc rl78 rs6000 rx s390
+	     score sh sh64 sparc spu stormy16 tilegx tilepro v850 vax
+	     visium vms xtensa"
   skip=
   for c in $skip_cpus; do
     if [ -z "$skip" ]; then 
@@ -123,6 +123,7 @@ case "$status" in
 	  grep -v netware |
 	  grep -v nwld |
 	  grep -v openbsd |
+	  grep -v phoenix |
 	  grep -v rtems |
 	  grep -v sol2 |
 	  grep -v solaris |

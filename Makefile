@@ -238,7 +238,11 @@ endif
 
 ifeq (x86_64,$(ARCH))
 ifeq ($(ENABLE_X32),yes)
+ifeq ($(CHECK_X32),yes)
+RUNTESTFLAGS=--target_board='unix{-m32,-mx32,}'
+else
 RUNTESTFLAGS=--target_board='unix{-mx32$(space)$(PIC)}'
+endif
 else
 ifneq ($(EXTRA-TEST-FLAGS),)
 RUNTESTFLAGS=--target_board='unix{$(EXTRA-TEST-FLAGS)}'

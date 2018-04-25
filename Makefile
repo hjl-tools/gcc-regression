@@ -126,6 +126,7 @@ CONFIG-FLAGS+=--prefix=$(PREFIX)
 #CONFIG-FLAGS+=--enable-checking=assert
 CONFIG-FLAGS+=--enable-clocale=gnu --with-system-zlib
 CONFIG-FLAGS+=--enable-shared
+CONFIG-FLAGS+=--enable-cet
 CONFIG-FLAGS+=--with-demangler-in-ld
 
 #CONFIG-FLAGS+=--with-cpu=nocona

@@ -1,3 +1,5 @@
+# Scripts to checkout GCC source, build GCC and run GCC testsuite
+
 This package can be used to
 
 1. Checkout GCC source.
@@ -7,7 +9,7 @@ This package can be used to
 The main script is "gcc-build", which assumes there is a GCC trunk
 git tree named "src-trunk", which should be cloned by
 
-# git clone GCC-GIT-URL src-trunk
+$ git clone GCC-GIT-URL src-trunk
 
 "gcc-build" takes options:
 

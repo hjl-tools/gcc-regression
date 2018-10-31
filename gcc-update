@@ -117,6 +117,7 @@ case "$status" in
 	  grep -v freebsd |
 	  grep -v hpux |
 	  grep -v interix |
+	  grep -v libphobos |
 	  grep -v lynx |
 	  grep -v mingw |
 	  grep -v netbsd |
@@ -129,6 +130,7 @@ case "$status" in
 	  grep -v solaris |
 	  grep -v vxworks |
 	  grep -v win32 |
+	  grep -v /d/ |
 	  grep -v /doc/ |
 	  grep -v /po/ |
 	  grep -v maintainer-scripts |
